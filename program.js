@@ -28,12 +28,10 @@ http.get(url, function(res) {
                 title: title,
                 year: year
             });
-            console.log(JSON.stringify(title));
-            console.log(JSON.stringify(year));
         };
 
     });
-
+    console.log("\nBook list loaded from '" + url + "'.\n");
 }).on("error", function(e) {
       console.log("Error: ", e);
 });
@@ -47,7 +45,6 @@ http.createServer(function(req, res) {
     HTML += style;
     HTML += "</head>\n<body>\n";
     _.each(books, function(book) {
-        console.log(JSON.stringify(book));
         var bookHTML = "<div class='book'>\n";
         bookHTML += "<h3>" + book.title +"</h3>\n";
         bookHTML += "<p>" + book.year + "</p>";
@@ -56,4 +53,5 @@ http.createServer(function(req, res) {
     })
     HTML += ("</body></html>");
     res.end(HTML);
+    console.log("HTML page served!");
 }).listen(8000);

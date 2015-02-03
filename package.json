@@ -19,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/vaaralav/mashup-ville/issues"
   },
-  "homepage": "https://github.com/vaaralav/mashup-ville"
+  "homepage": "https://github.com/vaaralav/mashup-ville",
+  "readme": "README.md"
 }
