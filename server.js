@@ -13,7 +13,6 @@ var mongojs = require('mongojs'),
         books: mongojs(config.dbURL).collection('books')
     };
 
-
 /**
  * Setting up express
  */
@@ -25,10 +24,13 @@ app.engine('html', require('hogan-express'));
 app.set('view engine', 'html');
 app.use(express.static(path.join(__dirname, 'public')));
 
+/**
+ * ROUTER
+ */
 require('./routes.js')(express, app, db, config);
 
-app.set('port', 8000);
+app.set('port', port);
 var server = require('http').createServer(app);
 server.listen(app.get('port'), function() {
-    console.log("on port: " + app.get('port'));
+    console.log("Server on port: " + app.get('port'));
 })

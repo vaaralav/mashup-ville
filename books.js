@@ -6,20 +6,22 @@ module.exports = function(db, config, resClient) {
 
 	// Check if the books list is updated in last 24 hours
 	db.update.find({}, function(err, docs) {
+		
 		var lastUpdate = _.max(docs, function(d) {
 			return d.updated;
 		});
-		console.log(lastUpdate + " : typeof -> " + typeof lastUpdate)
+
+		// -Infinity -> there wasn't any updates in the database
 		if(lastUpdate === -Infinity) {
-			lastUpdate = 0;
-			db.update.save({updated:Date.now()});
-		} else {
+			db.update.save({updated:-Infinity}); // Add new update to database
+		} else { // take out the interesting part for later
 			lastUpdate = lastUpdate.updated;
 		}
-		console.log(JSON.stringify(lastUpdate) + " dsafafhdlah");
+		
 		// Book list is over 24 hours old -> update
 		if((Date.now() - lastUpdate) > 24*60*60 ) {
 			console.log("Update books list!");
+			// Clear old list from the database
 			db.books.remove({});
 			http.get(config.booksURL, function(res) {
 
@@ -39,18 +41,18 @@ module.exports = function(db, config, resClient) {
 			            var year = authorRes.records[i].year;
 			            year = year.replace(/\D+/, '');
 
-			            books.push({
+			            var book = {
 			                title: title,
 			                year: year
-			            });
-			            db.books.insert(_.last(books));
+			            };
+			            db.books.insert(book);
+			            books.push(book);
 			        }
 			        resClient.json(books);
 			        db.update.update({}, {updated:Date.now()});
 
 			    });
-			    console.log("\nBook list loaded from '" + config.booksURL + "'.\n");
-			    console.log("here\n" + JSON.stringify(books));
+
 			}).on("error", function(e) {
 			      console.log("Error: ", e);
 			});
@@ -69,7 +71,5 @@ module.exports = function(db, config, resClient) {
 		}
 
 	});
-	
-
 
 }
