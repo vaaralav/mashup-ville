@@ -1,24 +1,27 @@
 {
   "name": "mashup-ville",
   "version": "1.0.0",
-  "description": "",
-  "main": "program.js",
+  "description": "Run <code>npm install</code> and  <code>node program.js</code>.",
+  "main": "server.js",
   "dependencies": {
-    "lodash": "^3.0.1"
+    "express": "^4.11.2",
+    "hogan-express": "^0.5.2",
+    "lodash": "^3.0.1",
+    "mongojs": "^0.18.1"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/vaaralav/mashup-ville.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Ville Vaarala",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/vaaralav/mashup-ville/issues"
   },
-  "homepage": "https://github.com/vaaralav/mashup-ville",
-  "readme": "README.md"
+  "homepage": "https://github.com/vaaralav/mashup-ville"
 }
