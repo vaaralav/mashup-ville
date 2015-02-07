@@ -1,5 +1,4 @@
 {
-	"host": "http://localhost:8000",
 	"dbURL": "mongodb://localhost/mashup",
 	"booksURL" :"http://metadata.helmet-kirjasto.fi/search/author.json?query=Campbell"
 
