@@ -7,10 +7,15 @@ module.exports = function(express, app, db, config) {
 		res.render('index.html', {title:'Welcome to mashup!'});
 	});
 
+	// Booklist frontend
+	router.get('/books', function(req, res, next) {
+		res.render('booklist.html', {title:'Author: Campbell'});
+	});
+
 	// Listing books
 	router.get('/api/query/books', function(req, res, next) {
 		books(db, config, res);
-	})
+	});
 
 	app.use('/', router);
 }

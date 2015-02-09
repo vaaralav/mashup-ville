@@ -1,4 +1,4 @@
- var express = require('express'),
+var express = require('express'),
      app = express(),
      port = 8000;
 var path = require('path');
@@ -31,6 +31,8 @@ require('./routes.js')(express, app, db, config);
 
 app.set('port', port);
 var server = require('http').createServer(app);
-server.listen(app.get('port'), function() {
+exports.start = function() {
+	server.listen(app.get('port'), function() {
     console.log("Server on port: " + app.get('port'));
-})
+	})
+};
