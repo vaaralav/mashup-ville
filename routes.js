@@ -17,5 +17,10 @@ module.exports = function(express, app, db, config) {
 		books(db, config, res);
 	});
 
+	// Weather
+	router.get('/api/query/weather', function(req, res, next) {
+		require('./weather.js')(config, res);
+	})
+
 	app.use('/', router);
 }
