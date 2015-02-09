@@ -19,7 +19,7 @@ module.exports = function(db, config, resClient) {
 		}
 		
 		// Book list is over 24 hours old -> update
-		if((Date.now() - lastUpdate) > 24*60*60 ) {
+		if((Date.now() - lastUpdate) > 24*60*60*1000 ) {
 			console.log("Update books list!");
 			// Clear old list from the database
 			db.books.remove({});
