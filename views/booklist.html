@@ -10,37 +10,15 @@
 <div class="container">
 <header>
 <h1>{{title}}</h1>
-<p class="lead">Below is list of routes this server serves for you!</p>
+<p class="lead">Matching books in Helsingin Kirjasto</p>
 </header>
 
-<section>
-<header>
-<h2>Index page <small><a href="/">/</a></small></h2>
-</header>
-<p>Index page. List of routes this server serves.
-</p>
-</section>
-
-<section>
-<header>
-<h2>Booklist <small><a href="/books">/books</a></small></h2>
-</header>
-<p>Frontend for <a href="/api/query/books">/api/query/books</a>.
-</p>
-</section>
-
-<section>
-<header>
-<h2>API endpoint: Booklist <small><a href="/api/query/books">/api/query/books</a></small></h2>
-
-</header>
-<p>Lists books that match query "author=Campbell" in Helsingin Kirjasto's database.
-</p>
-</section>
+<div id="books-list">
+<p class="lead">Lataa...</p>
+</div>
 
 </div> <!-- /.container -->
 </div>
-
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
@@ -49,5 +27,18 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+(function() {
+	$.getJSON('/api/query/books', function(data) {
+		var booksHTML = "";
+		$.each(data, function(idx, book) {
+			var bookHTML = "<section><h2>"+book.title+" <small>"+book.year+"</small></h2></section>\n";
+			booksHTML += bookHTML;
+		})
+		$("#books-list").html(booksHTML);
+		//$("#books-list").append("<p>"+JSON.stringify(data)+"</p>");
+	})
+}())</script>
 </body>
 </html>
