@@ -9,6 +9,10 @@
 <div class="site-wrapper">
 <div class="container">
 <header>
+<div class="logo">
+<a href="/"><img src="img/logo.png" alt="logo"></a>
+</div>
+
 <h1>{{title}}</h1>
 <p class="lead">Below is list of routes this server serves for you!</p>
 </header>
@@ -32,9 +36,16 @@
 <section>
 <header>
 <h2>API endpoint: Booklist <small><a href="/api/query/books">/api/query/books</a></small></h2>
-
 </header>
 <p>Lists books that match query "author=Campbell" in Helsingin Kirjasto's database.
+</p>
+</section>
+
+<section>
+<header>
+<h2>API endpoint: Weather <small><a href="/api/query/weather">/api/query/weather</a></small></h2>
+</header>
+<p>Gives latest temperature observed by weather station in Tampere.
 </p>
 </section>
 
