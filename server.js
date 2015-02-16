@@ -32,6 +32,11 @@ require('./routes.js')(express, app, db, config);
 
 app.set('port', port);
 var server = require('http').createServer(app);
+
+
+/**
+ * export START
+ */
 exports.start = function() {
 	server.listen(app.get('port'), function() {
     console.log("Server on port: " + app.get('port'));

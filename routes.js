@@ -14,7 +14,11 @@ module.exports = function(express, app, db, config) {
 
 	// The real mashup!
 	router.get('/mashup', function(req,res,next) {
-		res.render('mashup.html', {title:'mashup-ville'});
+		var t = new Date();
+		res.render('mashup.html', {
+			title:'mashup-ville',
+			time: t.getHours() + ":" + t.getMinutes()
+		});
 	});
 
 	// Listing books

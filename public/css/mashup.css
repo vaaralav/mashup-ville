@@ -1,5 +1,5 @@
-.hero {
-	min-height: 120px;
+.hero, .hero .col-md-4 {
+	height: 200px;
 	vertical-align: center;
 }
 
@@ -9,4 +9,24 @@
 
 #weather img {
 	height: 60px;
+}
+
+#w-cam img {
+	height: 100%;
+}
+
+#clock {
+	font-size: 4em;
+	padding: 0;
+	margin: 0;
+}
+
+#clock img {
+	height: 42px;
+}
+
+@media (max-width: 992px) {
+	.no-show-mo {
+		display:none;
+	}
 }
