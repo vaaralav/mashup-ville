@@ -46,8 +46,9 @@
 	<script type="text/javascript">
 	(function() {
 		$.getJSON('/api/query/weather', function(data) {
-			var resultHTML = "<h2>" + data.temperature + " °C</h2>\n";
-			$("#weather").html(booksHTML);
+			var resultHTML = "<img src='img/weathersymbol/" + data.symbolValue + ".png' alt='" + data.symbolDesc + "' title='" + data.symbolDesc + "'>\n"; 
+			resultHTML += "<h2>" + data.temperature + " °C</h2>\n";
+			$("#weather").html(resultHTML);
 			//$("#books-list").append("<p>"+JSON.stringify(data)+"</p>");
 		})
 	}())</script>

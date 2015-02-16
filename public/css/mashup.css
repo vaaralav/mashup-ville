@@ -1,8 +1,12 @@
 .hero {
-	height: 120px;
+	min-height: 120px;
 	vertical-align: center;
 }
 
 .hero .lead {
 	border: 0;
+}
+
+#weather img {
+	height: 60px;
 }
