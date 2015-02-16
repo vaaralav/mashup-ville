@@ -3,6 +3,8 @@ module.exports = function(config, resClient) {
 		xmlParser = new xml2js.Parser();
 	var _ = require('lodash');
 
+	var wSymbol = require('./weathersymbol3.json');
+
 	// You need to add this file on your own!
 	var fmiAPIkey = require('./fmi-apikey.json');
 	config.weatherURL = config.weatherURL.replace(/APIKEYHERE/, fmiAPIkey.key);
@@ -33,7 +35,13 @@ module.exports = function(config, resClient) {
 					time: time.toLocaleString(),
 					temperature: Number(temp)
 				}
-/*				require('http').get(config.forecastURL, function(res) {
+
+
+
+
+
+				// Get Weather Symbol from closest forecast
+				require('http').get(config.forecastURL, function(res) {
 					var body = "";
 
 					res.on('data', function(chunk) {
@@ -41,14 +49,26 @@ module.exports = function(config, resClient) {
 					});
 
 					res.on("end", function(){
-						resClient.end(body);
+
 						xmlParser.parseString(body, function(err, result) {
 							if (err) throw err;
-
+							// Numeric value for symbol in closest forecast
+							weather.symbolValue = +result["wfs:FeatureCollection"]["wfs:member"][0]["BsWfs:BsWfsElement"][0]["BsWfs:ParameterValue"];
+							weather.symbolDesc = wSymbol[ weather.symbolValue ];
+							//weather.symbolPic = "img/weather/" + weather.symbolValue + ".png";
  						})
+
+
+
+
+
+ 						/*******************************
+ 						 * SEND WEATHER INFO TO CLIENT *
+ 						 *******************************/
+ 						resClient.json(weather);
 					});
-				})*/
-				resClient.json(weather);
+				})
+				
 			});
 		});
 	});
