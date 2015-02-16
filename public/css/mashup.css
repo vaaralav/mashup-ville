@@ -1,0 +1,8 @@
+.hero {
+	height: 120px;
+	vertical-align: center;
+}
+
+.hero .lead {
+	border: 0;
+}

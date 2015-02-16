@@ -6,7 +6,8 @@ module.exports = function(config, resClient) {
 	// You need to add this file on your own!
 	var fmiAPIkey = require('./fmi-apikey.json');
 	config.weatherURL = config.weatherURL.replace(/APIKEYHERE/, fmiAPIkey.key);
-	
+	config.forecastURL = config.forecastURL.replace(/APIKEYHERE/, fmiAPIkey.key);
+
 	// Get weather data
 	require('http').get(config.weatherURL, function(res) {
 		var body = "";
@@ -32,7 +33,22 @@ module.exports = function(config, resClient) {
 					time: time.toLocaleString(),
 					temperature: Number(temp)
 				}
-				resClient.json(weather);
+				require('http').get(config.forecastURL, function(res) {
+					var body = "";
+
+					res.on('data', function(chunk) {
+						body += chunk;
+					});
+
+					res.on("end", function(){
+						resClient.end(body);
+						xmlParser.parseString(body, function(err, result) {
+							if (err) throw err;
+
+ 						})
+					});
+				})
+				//resClient.json(weather);
 			});
 		});
 	});

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{title}}</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+	<link href="css/mashup.css" rel="stylesheet">
+</head>
+<body>
+	<div class="site-wrapper">
+		<div class="container">
+			<header>
+				<div class="row">
+					<div class="hero col-md-4">
+					<div id="stop-map">
+					<p class="lead">Loading map...</p>
+					</div>
+					</div>
+					<div class="hero col-md-4">
+						<h1>Pyynikintori</h1>
+						<div id="weather"><p class="lead">Loading weather data...</p></div>
+					</div>
+					<div class="hero col-md-4">
+					<div id="w-cam">
+						<p class="lead">Loading weather camera...</p>
+						</div>
+					</div>
+				</div> <!-- /.row -->
+			</header>
+
+
+
+		</div> <!-- /.container -->
+	</div>
+
+
+<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="js/bootstrap.min.js"></script>
+	
+<!-- GET & SHOW DATA -->
+	<script type="text/javascript">
+	(function() {
+		$.getJSON('/api/query/weather', function(data) {
+			var resultHTML = "<h2>" + data.temperature + " °C</h2>\n";
+			$("#weather").html(booksHTML);
+			//$("#books-list").append("<p>"+JSON.stringify(data)+"</p>");
+		})
+	}())</script>
+</body>
+</html>

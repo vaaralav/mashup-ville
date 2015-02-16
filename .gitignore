@@ -2,3 +2,4 @@ node_modules/
 gitignore/
 *~
 fmi-apikey.json
+npm-debug.log

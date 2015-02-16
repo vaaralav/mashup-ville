@@ -12,6 +12,11 @@ module.exports = function(express, app, db, config) {
 		res.render('booklist.html', {title:'Author: Campbell'});
 	});
 
+	// The real mashup!
+	router.get('/mashup', function(req,res,next) {
+		res.render('mashup.html', {title:'mashup-ville'});
+	});
+
 	// Listing books
 	router.get('/api/query/books', function(req, res, next) {
 		books(db, config, res);
