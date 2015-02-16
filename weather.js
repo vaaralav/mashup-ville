@@ -33,7 +33,7 @@ module.exports = function(config, resClient) {
 					time: time.toLocaleString(),
 					temperature: Number(temp)
 				}
-				require('http').get(config.forecastURL, function(res) {
+/*				require('http').get(config.forecastURL, function(res) {
 					var body = "";
 
 					res.on('data', function(chunk) {
@@ -47,8 +47,8 @@ module.exports = function(config, resClient) {
 
  						})
 					});
-				})
-				//resClient.json(weather);
+				})*/
+				resClient.json(weather);
 			});
 		});
 	});
