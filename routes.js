@@ -14,10 +14,13 @@ module.exports = function(express, app, db, config) {
 
 	// The real mashup!
 	router.get('/mashup', function(req,res,next) {
+		var twoDigits = function twoDigits(i) {
+			return i < 10 ? "0"+i : i;
+		}
 		var t = new Date();
 		res.render('mashup.html', {
 			title:'mashup-ville',
-			time: t.getHours() + ":" + t.getMinutes()
+			time: twoDigits(t.getHours()) + ":" + twoDigits(t.getMinutes())
 		});
 	});
 
@@ -28,7 +31,7 @@ module.exports = function(express, app, db, config) {
 
 	// Weather
 	router.get('/api/query/weather', function(req, res, next) {
-		require('./weather.js')(config, res);
+		require('./weather.js')(db, config, res);
 	})
 
 	app.use('/', router);

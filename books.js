@@ -5,17 +5,17 @@ module.exports = function(db, config, resClient) {
 	var books = [];
 
 	// Check if the books list is updated in last 24 hours
-	db.update.find({}, function(err, docs) {
+	db.update.find({books: {$exists:true}}, function(err, docs) {
 		
 		var lastUpdate = _.max(docs, function(d) {
-			return d.updated;
+			return d.books;
 		});
 
 		// -Infinity -> there wasn't any updates in the database
 		if(lastUpdate === -Infinity) {
-			db.update.save({updated:-Infinity}); // Add new update to database
+			db.update.save({books:-Infinity}); // Add new update to database
 		} else { // take out the interesting part for later
-			lastUpdate = lastUpdate.updated;
+			lastUpdate = lastUpdate.books;
 		}
 		
 		// Book list is over 24 hours old -> update
@@ -49,7 +49,7 @@ module.exports = function(db, config, resClient) {
 			            books.push(book);
 			        }
 			        resClient.json(books);
-			        db.update.update({}, {updated:Date.now()});
+			        db.update.update({books:{$exists:true}}, {books:Date.now()});
 
 			    });
 

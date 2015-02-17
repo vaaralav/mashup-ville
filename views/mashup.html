@@ -12,14 +12,13 @@
 			<header>
 				<div class="row">
 					<div class="hero col-md-4">
-						<h1>Pyynikintori</h1>
-						<div id="weather"><p class="lead">Loading weather data...</p></div>
+						<h1>Tampere</h1>
+						<div id="weather"></div>
 					</div>
-					<div id="w-cam" class="hero col-md-4 no-show-mo">
-						<img src="http://open.digitraffic.fi/weathercam/C1850101.jpg" alt="Weather Camera Pirkankatu, Tampere" title="C1850101">
+					<div id="w-cam" class="hero col-md-4 no-show-mo" alt="Weather Camera Pirkankatu, Tampere" title="Pirkankatu, Tampere">
 					</div>
 					<div id="clock" class="hero col-md-4 no-show-mo">
-						<img src="img/clock.png">
+						<img src="img/clock.png" alt="Clock" title="Tick Tock">
 						<p><time id="time">{{time}}</time></p>
 					</div>
 				</div> <!-- /.row -->
@@ -42,14 +41,19 @@
 <!-- GET & SHOW DATA -->
 	<script type="text/javascript">
 	(function() {
-		// Get weather data
+		/**
+		 * WEATHER
+		 */
+		function getWeather() {
+			console.log("getWeather() called!")
 		$.getJSON('/api/query/weather', function(data) {
 			var resultHTML = "<img src='img/weathersymbol/" + data.symbolValue + ".png' alt='" + data.symbolDesc + "' title='" + data.symbolDesc + "'>\n"; 
-			resultHTML += "<h2>" + data.temperature + " °C</h2>\n";
+			resultHTML += "<h2 title='"+data.time+"'>" + data.temperature + " °C</h2>\n";
 			$("#weather").html(resultHTML);
+			$("#w-cam").html("<img src='http://open.digitraffic.fi/weathercam/C1850101.jpg?t="+Date.now()+"'>");
 		})
-
-		clock();
+		setTimeout(function(){getWeather}, 2*60*1000); // update every 2 minutes
+		}
 
 		/**
 		 * CLOCK
@@ -66,6 +70,15 @@
 		function addZero(i) {
 			return (i<10 ? ("0" + i) : (i));
 		}
+
+
+
+
+		/**
+		 * MAIN
+		 */
+		getWeather();
+		clock();
 
 	}())</script>
 </body>

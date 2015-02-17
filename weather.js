@@ -1,102 +1,94 @@
-module.exports = function(config, resClient) {
+module.exports = function(db, config, resClient) {
 	var xml2js = require('xml2js'),
 		xmlParser = new xml2js.Parser();
 	var _ = require('lodash');
 
 	var wSymbol = require('./weathersymbol3.json');
 
-	// You need to add this file on your own!
-	var fmiAPIkey = require('./fmi-apikey.json');
-	config.weatherURL = config.weatherURL.replace(/APIKEYHERE/, fmiAPIkey.key);
-	config.forecastURL = config.forecastURL.replace(/APIKEYHERE/, fmiAPIkey.key);
-
-	// Get weather data
-	require('http').get(config.weatherURL, function(res) {
-		var body = "";
-
-		res.on("data", function(chunk) {
-		    body += chunk;
+	// Check if the weather is updated in the last 10 minutes
+	db.weather.find({}, function(err, docs) {
+		var lastUpdate = _.max(docs, function(d) {
+			return d.time;
 		});
+		// If there was no weather data in db assume last updated never
+		lastUpdate = (lastUpdate.time !== 'null' ? lastUpdate.time : -Infinity);
 
-		res.on("end", function() {
-			// Parse observation time and temperature
-			xmlParser.parseString(body, function(err, result) {
-				if(err) throw err;
+		// Weather info is over 10 minutes old -> update!
+		if((Date.now() - lastUpdate) > 10*60*1000 ) {
+			console.log("Update weather data");
+			db.weather.remove({});
+			// You need to add this file on your own!
+			var fmiAPIkey = require('./fmi-apikey.json');
+			config.weatherURL = config.weatherURL.replace(/APIKEYHERE/, fmiAPIkey.key);
+			config.forecastURL = config.forecastURL.replace(/APIKEYHERE/, fmiAPIkey.key);
 
-				var latestObs = _.max(result["wfs:FeatureCollection"]["wfs:member"], function(d) {
-					console.log("\n\n"+JSON.stringify(d["BsWfs:BsWfsElement"][0]["BsWfs:Time"][0])+"\n");
-					var t = new Date(d["BsWfs:BsWfsElement"][0]["BsWfs:Time"][0]);
-					return t.getTime();
+			// Get weather data
+			require('http').get(config.weatherURL, function(res) {
+				var body = "";
+
+				res.on("data", function(chunk) {
+				    body += chunk;
 				});
-				console.log("\n\n\n" + JSON.stringify(latestObs));
-				var temp = latestObs["BsWfs:BsWfsElement"][0]["BsWfs:ParameterValue"][0];
-				var time = new Date(latestObs["BsWfs:BsWfsElement"][0]["BsWfs:Time"][0]);
-				var weather = {
-					time: time.toLocaleString(),
-					temperature: Number(temp)
-				}
+
+				res.on("end", function() {
+					// Parse observation time and temperature
+					xmlParser.parseString(body, function(err, result) {
+						if(err) throw err;
+
+						var latestObs = _.max(result["wfs:FeatureCollection"]["wfs:member"], function(d) {
+							var t = new Date(d["BsWfs:BsWfsElement"][0]["BsWfs:Time"][0]);
+							return t.getTime();
+						});
+						var temp = latestObs["BsWfs:BsWfsElement"][0]["BsWfs:ParameterValue"][0];
+						var time = new Date(latestObs["BsWfs:BsWfsElement"][0]["BsWfs:Time"][0]);
+						var weather = {
+							time: time.toLocaleString(),
+							temperature: Number(temp)
+						}
 
 
 
 
 
-				// Get Weather Symbol from closest forecast
-				require('http').get(config.forecastURL, function(res) {
-					var body = "";
+						// Get Weather Symbol from closest forecast
+						require('http').get(config.forecastURL, function(res) {
+							var body = "";
 
-					res.on('data', function(chunk) {
-						body += chunk;
+							res.on('data', function(chunk) {
+								body += chunk;
+							});
+
+							res.on("end", function(){
+
+								xmlParser.parseString(body, function(err, result) {
+									if (err) throw err;
+									// Numeric value for symbol in closest forecast
+									weather.symbolValue = +result["wfs:FeatureCollection"]["wfs:member"][0]["BsWfs:BsWfsElement"][0]["BsWfs:ParameterValue"];
+									weather.symbolDesc = wSymbol[ weather.symbolValue ];
+									//weather.symbolPic = "img/weather/" + weather.symbolValue + ".png";
+		 						})
+
+
+
+
+
+		 						/*******************************
+		 						 * SEND WEATHER INFO TO CLIENT *
+		 						 *******************************/
+		 						resClient.json(weather);
+		 						db.weather.save(weather);
+							});
+						});
 					});
-
-					res.on("end", function(){
-
-						xmlParser.parseString(body, function(err, result) {
-							if (err) throw err;
-							// Numeric value for symbol in closest forecast
-							weather.symbolValue = +result["wfs:FeatureCollection"]["wfs:member"][0]["BsWfs:BsWfsElement"][0]["BsWfs:ParameterValue"];
-							weather.symbolDesc = wSymbol[ weather.symbolValue ];
-							//weather.symbolPic = "img/weather/" + weather.symbolValue + ".png";
- 						})
-
-
-
-
-
- 						/*******************************
- 						 * SEND WEATHER INFO TO CLIENT *
- 						 *******************************/
- 						resClient.json(weather);
-					});
-				})
-				
+				});
 			});
-		});
+		}
+		else {
+			console.log("Use local weather data");
+			db.weather.findOne({}, function(err, doc){
+				if(err) throw err;
+				resClient.json(doc);
+			})
+		}
 	});
 };
-
-// var fs = require('fs'),
-//     xml2js = require('xml2js');
- 
-// var parser = new xml2js.Parser();
-// fs.readFile(__dirname + '/wfs.xml', function(err, data) {
-//     parser.parseString(data, function (err, result) {
-//         console.dir(JSON.stringify(result));
-//         //fs.writeFile("wfs.json", JSON.stringify(result), function(err) {
-//         //	if(err) throw err;
-//         //})
-//         console.log('Done');
-//         var temp = result["wfs:FeatureCollection"]["wfs:member"][0]["BsWfs:BsWfsElement"][0]["BsWfs:ParameterValue"][0];
-//     	console.log("\n\n\n" + JSON.stringify(temp));
-//     });
-// });
-
-
-// var getLatestTemperature = function getLatestTemperature(wfs, res) {
-// 	parser.parseString(data, function(err, result) {
-		
-// 	})
-// }
-
-// exports.latestTemperature = function(res) {
-// 	getLatestTemperature(wfs, res)
-// }

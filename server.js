@@ -11,7 +11,8 @@ var config = require('./config.json');
 var mongojs = require('mongojs'),
     db = {
         update: mongojs(config.dbURL).collection('update'),
-        books: mongojs(config.dbURL).collection('books')
+        books: mongojs(config.dbURL).collection('books'),
+        weather: mongojs(config.dbURL).collection('weather')
     };
 
 /**
