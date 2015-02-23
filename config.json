@@ -2,5 +2,6 @@
 	"dbURL": "mongodb://localhost/mashup",
 	"booksURL" :"http://metadata.helmet-kirjasto.fi/search/author.json?query=Campbell",
 	"weatherURL" : "http://data.fmi.fi/fmi-apikey/APIKEYHERE/wfs?request=getFeature&storedquery_id=fmi::observations::weather::simple&place=tampere&parameters=temperature",
-	"forecastURL" : "http://data.fmi.fi/fmi-apikey/APIKEYHERE/wfs?request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&place=tampere&parameters=WeatherSymbol3"
+	"forecastURL" : "http://data.fmi.fi/fmi-apikey/APIKEYHERE/wfs?request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&place=tampere&parameters=WeatherSymbol3",
+	"tklStopURL" : "http://api.publictransport.tampere.fi/prod/?request=stop&user=mashup-ville&pass=UOEq3hCfT8&code="
 }

@@ -12,7 +12,8 @@ var mongojs = require('mongojs'),
     db = {
         update: mongojs(config.dbURL).collection('update'),
         books: mongojs(config.dbURL).collection('books'),
-        weather: mongojs(config.dbURL).collection('weather')
+        weather: mongojs(config.dbURL).collection('weather'),
+        TKL: mongojs(config.dbURL).collection('TKL')
     };
 
 /**

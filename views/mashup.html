@@ -24,6 +24,17 @@
 				</div> <!-- /.row -->
 			</header>
 
+			<div class="row">
+			<div id="dir1" class="col-md-6 timetable">
+
+			</div>
+
+			<div id="dir2" class="col-md-6 timetable">
+
+
+
+			</div>
+
 
 
 		</div> <!-- /.container -->
@@ -45,31 +56,46 @@
 		 * WEATHER
 		 */
 		function getWeather() {
-			console.log("getWeather() called!")
+			console.log((new Date()).toLocaleString() + ": getWeather()")
 		$.getJSON('/api/query/weather', function(data) {
+
 			var resultHTML = "<img src='img/weathersymbol/" + data.symbolValue + ".png' alt='" + data.symbolDesc + "' title='" + data.symbolDesc + "'>\n"; 
 			resultHTML += "<h2 title='"+data.time+"'>" + data.temperature + " °C</h2>\n";
+			resultHTML += "<p>Päivitetty " + (new Date(data.time)).toLocaleString() +  "</p>\n";
 			$("#weather").html(resultHTML);
 			$("#w-cam").html("<img src='http://open.digitraffic.fi/weathercam/C1850101.jpg?t="+Date.now()+"'>");
 		})
-		setTimeout(function(){getWeather}, 2*60*1000); // update every 2 minutes
+		setTimeout(function(){getWeather()}, 2*60*1000); // update every 2 minutes
 		}
 
 		/**
 		 * CLOCK
 		 */
-		function clock() {
+
+
+		function clock(/*time*/) {
 			var today = new Date();
 			var hh=addZero(today.getHours());
 			var mm=addZero(today.getMinutes());
 			//var ss=addZero(today.getSeconds());
 			$("#time").html(hh+":"+mm);
-			setTimeout(function() {clock()}, 1000);
+			/*if(time % (1*60*1000) < 10000) {
+				startClock();
+			}*/
+			setTimeout(function() {clock(time + 1000)}, 1000);
 		}
 
 		function addZero(i) {
 			return (i<10 ? ("0" + i) : (i));
 		}
+
+/*		function startClock() {
+
+			console.log("startClock()");
+			$.getJSON('api/query/time', function(data) {
+				clock(data);
+			});
+		}*/
 
 
 
@@ -79,6 +105,7 @@
 		 */
 		getWeather();
 		clock();
+
 
 	}())</script>
 </body>

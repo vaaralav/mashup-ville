@@ -7,11 +7,20 @@ module.exports = function(db, config, resClient) {
 
 	// Check if the weather is updated in the last 10 minutes
 	db.weather.find({}, function(err, docs) {
+
+
+		// -Infinity if no updates, else 
 		var lastUpdate = _.max(docs, function(d) {
-			return d.time;
+			return (new Date(d.time)).getTime();
 		});
+		console.log("new Date( "+ JSON.stringify(lastUpdate.time) + " )");
+		lastUpdate = new Date( lastUpdate.time );
+		console.log("Date: " + lastUpdate);
+		console.log()
+
 		// If there was no weather data in db assume last updated never
-		lastUpdate = (lastUpdate.time !== 'null' ? lastUpdate.time : -Infinity);
+		lastUpdate = (lastUpdate.getTime() !== undefined ? lastUpdate.getTime() : -Infinity);
+		console.log("lastUpdate: " + lastUpdate);
 
 		// Weather info is over 10 minutes old -> update!
 		if((Date.now() - lastUpdate) > 10*60*1000 ) {

@@ -1,6 +1,7 @@
 module.exports = function(express, app, db, config) {
 	var books = require('./books.js');
 	var router = express.Router();
+	var tkl = require('./tkl.js');
 
 	// index.html
 	router.get('/', function(req, res, next) {
@@ -32,6 +33,16 @@ module.exports = function(express, app, db, config) {
 	// Weather
 	router.get('/api/query/weather', function(req, res, next) {
 		require('./weather.js')(db, config, res);
+	})
+
+	// Bus-stops timetables
+	router.get('/api/query/bus-stops', function(req, res, next) {
+		tkl(db, config, res);
+	})
+
+	// Server time
+	router.get('/api/query/time', function(req,res,next) {
+		res.json(Date.now());
 	})
 
 	app.use('/', router);

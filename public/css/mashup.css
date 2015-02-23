@@ -1,3 +1,7 @@
+/**
+ * HERO
+ */
+
 .hero, .hero .col-md-4 {
 	height: 200px;
 	vertical-align: center;
@@ -25,6 +29,26 @@
 	height: 42px;
 }
 
+header .row {
+	padding-bottom: 20px;
+}
+
+/**
+ * TIMETABLE
+ */
+
+.timetable {
+	border: 1px solid black;
+	min-height: 100px;
+}
+
+
+
+
+
+/**
+ * RESPONSIVE
+ */
 @media (max-width: 992px) {
 	.no-show-mo {
 		display:none;
